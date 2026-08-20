@@ -1,4 +1,4 @@
-# Doofus Adventure
+# Doofus Adventure - By Ayushman Das
 
 A 3D platform-hopping game built for the Hitwicket Game Developer Challenge, made in Unity 6.
 

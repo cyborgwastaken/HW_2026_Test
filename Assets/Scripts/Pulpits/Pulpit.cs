@@ -4,19 +4,26 @@ using Doofus.Core;
 
 namespace Doofus.Pulpits
 {
-    // A single pulpit: counts down its own randomized lifetime, warns just before it
-    // despawns, and reports the first time Doofus successfully lands on it (for scoring).
+    // A single pulpit: counts down its own randomized lifetime, reports the first time
+    // Doofus successfully lands on it (for scoring), and gives two visual cues for how
+    // much time is left - a countdown readout (always running) and a green-to-red color
+    // gradient that only starts once Doofus has actually stood on it.
     [RequireComponent(typeof(Collider))]
     public class Pulpit : MonoBehaviour
     {
         [SerializeField] private Renderer[] renderers;
-        [SerializeField] private float warningTimeRemaining = 1f;
-        [SerializeField] private Color warningColor = new Color(1f, 0.35f, 0.15f);
+        [SerializeField] private Color freshColor = new Color(0.05f, 0.85f, 0.25f);
+        [SerializeField] private Color dangerColor = new Color(0.9f, 0.15f, 0.1f);
+        [SerializeField] private TextMesh timerText;
 
         public Vector2Int GridPosition { get; private set; }
         public bool IsAlive { get; private set; } = true;
 
         private bool _hasBeenScored;
+        private bool _hasLanded;
+        private float _elapsed;
+        private float _elapsedAtLanding;
+        private float _lifetime;
         private Coroutine _lifetimeRoutine;
         private Collider[] _colliders;
 
@@ -37,14 +44,21 @@ namespace Doofus.Pulpits
             GridPosition = gridPosition;
             IsAlive = true;
             _hasBeenScored = false;
+            _hasLanded = false;
+            _elapsed = 0f;
+            _elapsedAtLanding = 0f;
+            _lifetime = Mathf.Max(0.01f, lifetimeSeconds);
 
             foreach (Collider c in _colliders)
             {
                 if (c != null) c.enabled = true;
             }
 
+            SetColor(freshColor);
+            UpdateTimerText(_lifetime);
+
             if (_lifetimeRoutine != null) StopCoroutine(_lifetimeRoutine);
-            _lifetimeRoutine = StartCoroutine(LifetimeCountdown(Mathf.Max(0.01f, lifetimeSeconds)));
+            _lifetimeRoutine = StartCoroutine(LifetimeCountdown());
         }
 
         // Marks the starting pulpit as already scored so Doofus spawning on it doesn't
@@ -54,25 +68,30 @@ namespace Doofus.Pulpits
             _hasBeenScored = true;
         }
 
-        private IEnumerator LifetimeCountdown(float lifetime)
+        private IEnumerator LifetimeCountdown()
         {
-            float elapsed = 0f;
-            bool warned = false;
-
-            while (elapsed < lifetime)
+            while (_elapsed < _lifetime)
             {
-                elapsed += Time.deltaTime;
+                _elapsed += Time.deltaTime;
+                UpdateTimerText(_lifetime - _elapsed);
 
-                if (!warned && lifetime - elapsed <= warningTimeRemaining)
+                if (_hasLanded)
                 {
-                    warned = true;
-                    SetColor(warningColor);
+                    float denom = Mathf.Max(0.01f, _lifetime - _elapsedAtLanding);
+                    float t = Mathf.Clamp01((_elapsed - _elapsedAtLanding) / denom);
+                    SetColor(Color.Lerp(freshColor, dangerColor, t));
                 }
 
                 yield return null;
             }
 
             Despawn();
+        }
+
+        private void UpdateTimerText(float remaining)
+        {
+            if (timerText == null) return;
+            timerText.text = Mathf.Max(0f, remaining).ToString("F1");
         }
 
         private void SetColor(Color color)
@@ -98,8 +117,15 @@ namespace Doofus.Pulpits
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_hasBeenScored || !IsAlive) return;
-            if (!other.CompareTag("Player")) return;
+            if (!IsAlive || !other.CompareTag("Player")) return;
+
+            if (!_hasLanded)
+            {
+                _hasLanded = true;
+                _elapsedAtLanding = _elapsed;
+            }
+
+            if (_hasBeenScored) return;
 
             _hasBeenScored = true;
             GameEvents.RaisePulpitLanded();

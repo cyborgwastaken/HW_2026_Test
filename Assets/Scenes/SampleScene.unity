@@ -518,7 +518,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 40
   m_Depth: -1
   m_CullingMask:
@@ -832,6 +832,9 @@ MonoBehaviour:
   pulpitPrefab: {fileID: 8893712735813491604, guid: 83157f8c648ef49818963e4b8270327d, type: 3}
   pulpitSize: 9
   pulpitHeight: 0
+  minSpawnLifeFraction: 0.4
+  maxSpawnLifeFraction: 0.7
+  scoreForMaxSpawnPercent: 50
 --- !u!4 &774425911
 Transform:
   m_ObjectHideFlags: 0

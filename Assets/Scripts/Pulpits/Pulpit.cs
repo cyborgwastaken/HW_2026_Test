@@ -19,6 +19,11 @@ namespace Doofus.Pulpits
         public Vector2Int GridPosition { get; private set; }
         public bool IsAlive { get; private set; } = true;
 
+        // Fraction of this pulpit's randomized lifetime that has elapsed (0 = just
+        // spawned, 1 = about to despawn). PulpitSpawner watches this to decide when to
+        // spawn the next pulpit.
+        public float LifeFraction => _lifetime > 0f ? Mathf.Clamp01(_elapsed / _lifetime) : 1f;
+
         private bool _hasBeenScored;
         private bool _hasLanded;
         private float _elapsed;

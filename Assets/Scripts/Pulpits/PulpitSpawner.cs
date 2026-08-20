@@ -38,6 +38,7 @@ namespace Doofus.Pulpits
         {
             GameEvents.OnGameStart += HandleGameStart;
             GameEvents.OnGameReset += HandleGameReset;
+            GameEvents.OnGameOver += HandleGameOver;
             GameEvents.OnScoreChanged += HandleScoreChanged;
         }
 
@@ -45,6 +46,7 @@ namespace Doofus.Pulpits
         {
             GameEvents.OnGameStart -= HandleGameStart;
             GameEvents.OnGameReset -= HandleGameReset;
+            GameEvents.OnGameOver -= HandleGameOver;
             GameEvents.OnScoreChanged -= HandleScoreChanged;
         }
 
@@ -71,6 +73,20 @@ namespace Doofus.Pulpits
             FirstPulpit.MarkPreScored();
 
             _spawnLoop = StartCoroutine(SpawnLoop());
+        }
+
+        // Stops spawning new pulpits once Doofus falls - existing ones just finish
+        // their own already-running lifetime/despawn on their own, only new spawns
+        // are cut off (they'd otherwise keep appearing behind the Game Over screen
+        // until Retry).
+        private void HandleGameOver()
+        {
+            _running = false;
+            if (_spawnLoop != null)
+            {
+                StopCoroutine(_spawnLoop);
+                _spawnLoop = null;
+            }
         }
 
         private void HandleGameReset()

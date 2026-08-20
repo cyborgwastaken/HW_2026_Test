@@ -7,7 +7,9 @@ namespace Doofus.Pulpits
     // A single pulpit: counts down its own randomized lifetime, reports the first time
     // Doofus successfully lands on it (for scoring), and gives two visual cues for how
     // much time is left - a countdown readout (always running) and a green-to-red color
-    // gradient that only starts once Doofus has actually stood on it.
+    // gradient that only starts once Doofus has actually stood on it. Spawns in small
+    // (centered on its grid cell) and grows to full size, and mirrors that by shrinking
+    // back down before actually despawning.
     [RequireComponent(typeof(Collider))]
     public class Pulpit : MonoBehaviour
     {
@@ -15,6 +17,9 @@ namespace Doofus.Pulpits
         [SerializeField] private Color freshColor = new Color(0.05f, 0.85f, 0.25f);
         [SerializeField] private Color dangerColor = new Color(0.9f, 0.15f, 0.1f);
         [SerializeField] private TextMesh timerText;
+        [SerializeField] private float spawnGrowDuration = 0.4f;
+        [SerializeField] private float despawnShrinkDuration = 0.4f;
+        [SerializeField] private float startScaleFraction = 0.05f;
 
         public Vector2Int GridPosition { get; private set; }
         public bool IsAlive { get; private set; } = true;
@@ -30,7 +35,9 @@ namespace Doofus.Pulpits
         private float _elapsedAtLanding;
         private float _lifetime;
         private Coroutine _lifetimeRoutine;
+        private Coroutine _scaleRoutine;
         private Collider[] _colliders;
+        private Vector3 _fullScale;
 
         private void Awake()
         {
@@ -42,6 +49,8 @@ namespace Doofus.Pulpits
             {
                 renderers = GetComponentsInChildren<Renderer>();
             }
+
+            _fullScale = transform.localScale;
         }
 
         public void Initialize(Vector2Int gridPosition, float lifetimeSeconds)
@@ -61,6 +70,12 @@ namespace Doofus.Pulpits
 
             SetColor(freshColor);
             UpdateTimerText(_lifetime);
+
+            // Spawn in small (at the grid cell's center, since scaling around the
+            // object's own pivot grows it outward evenly) and grow to full size.
+            if (_scaleRoutine != null) StopCoroutine(_scaleRoutine);
+            transform.localScale = SmallScale();
+            _scaleRoutine = StartCoroutine(AnimateScale(transform.localScale, _fullScale, spawnGrowDuration, destroyAfter: false));
 
             if (_lifetimeRoutine != null) StopCoroutine(_lifetimeRoutine);
             _lifetimeRoutine = StartCoroutine(LifetimeCountdown());
@@ -117,7 +132,31 @@ namespace Doofus.Pulpits
                 if (c != null) c.enabled = false;
             }
 
-            Destroy(gameObject, 0.15f);
+            // Shrink back down (mirroring the spawn-in grow) before actually destroying.
+            if (_scaleRoutine != null) StopCoroutine(_scaleRoutine);
+            _scaleRoutine = StartCoroutine(AnimateScale(transform.localScale, SmallScale(), despawnShrinkDuration, destroyAfter: true));
+        }
+
+        private Vector3 SmallScale()
+        {
+            return new Vector3(_fullScale.x * startScaleFraction, _fullScale.y, _fullScale.z * startScaleFraction);
+        }
+
+        private IEnumerator AnimateScale(Vector3 from, Vector3 to, float duration, bool destroyAfter)
+        {
+            float elapsed = 0f;
+            duration = Mathf.Max(0.01f, duration);
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                transform.localScale = Vector3.Lerp(from, to, elapsed / duration);
+                yield return null;
+            }
+
+            transform.localScale = to;
+
+            if (destroyAfter) Destroy(gameObject);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -139,6 +178,7 @@ namespace Doofus.Pulpits
         private void OnDestroy()
         {
             if (_lifetimeRoutine != null) StopCoroutine(_lifetimeRoutine);
+            if (_scaleRoutine != null) StopCoroutine(_scaleRoutine);
         }
     }
 }

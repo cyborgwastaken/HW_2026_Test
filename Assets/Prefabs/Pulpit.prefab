@@ -14,12 +14,13 @@ GameObject:
   - component: {fileID: 8719397338383192271}
   - component: {fileID: 8893712735813491604}
   - component: {fileID: 5284308361181723111}
+  - component: {fileID: -7418211925128411967}
   m_Layer: 0
   m_Name: Pulpit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &9123381216508974495
 Transform:
@@ -128,8 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Doofus.Pulpits.Pulpit
   renderers: []
-  freshColor: {r: 0.05, g: 0.85, b: 0.25, a: 1}
-  dangerColor: {r: 0.9, g: 0.15, b: 0.1, a: 1}
+  freshColor: {r: 0, g: 0.65882355, b: 0.5882353, a: 1}
+  dangerColor: {r: 0.6981132, g: 0.062566735, b: 0.35764188, a: 0.19215687}
   timerText: {fileID: 7481291975184576442}
 --- !u!65 &5284308361181723111
 BoxCollider:
@@ -152,6 +153,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.05, y: 3, z: 1.05}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!111 &-7418211925128411967
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3563999201603465620}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &5621287424243338746
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +185,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6232004560242786214
 Transform:
@@ -179,8 +196,8 @@ Transform:
   m_GameObject: {fileID: 5621287424243338746}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000030908623, y: 0.7071068, z: 0.7071068, w: -0.000000030908623}
-  m_LocalPosition: {x: 0, y: 0.02, z: 0.4}
-  m_LocalScale: {x: 0.11111111, y: 1, z: 0.11111111}
+  m_LocalPosition: {x: 0, y: 0.02, z: 0}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9123381216508974495}

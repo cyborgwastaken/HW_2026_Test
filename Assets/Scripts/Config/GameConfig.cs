@@ -2,6 +2,12 @@ using System;
 
 namespace Doofus.Config
 {
+    // Pure data shape mirroring doofus_diary.json's field names (required for
+    // JsonUtility to deserialize it directly). The field initializers below are NOT
+    // the game's real values - they're a fallback used only if GameConfigLoader can't
+    // read/parse the actual file. GameConfigLoader.cs is what performs the real read at
+    // runtime (via File.ReadAllText + JsonUtility.FromJson) and overwrites these with
+    // whatever the JSON actually contains.
     [Serializable]
     public class PlayerData
     {

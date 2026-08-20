@@ -23,7 +23,7 @@ namespace Doofus.Screens
 
         private void HandleScoreChanged(int score)
         {
-            if (scoreText != null) scoreText.text = $"Pulpits: {score}";
+            if (scoreText != null) scoreText.text = $"{score}";
         }
 
         private void HandleGameStart()

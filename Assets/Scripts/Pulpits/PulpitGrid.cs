@@ -16,17 +16,23 @@ namespace Doofus.Pulpits
         };
 
         // Picks a random cell adjacent to 'from' that isn't already occupied by a
-        // currently-alive pulpit. Falls back to any adjacent cell (even if technically
-        // occupied) rather than throwing, so a pathological occupancy state never
-        // crashes the spawner.
-        public static Vector2Int GetRandomAdjacent(Vector2Int from, List<Pulpit> occupied)
+        // currently-alive pulpit, and - if avoid is given - isn't that cell either, even
+        // if the pulpit that used to be there has since despawned. That keeps the next
+        // pulpit from reappearing at the spot Doofus just walked off of. Relaxes each
+        // constraint in turn (avoid, then occupancy) rather than throwing, so a
+        // pathological state never crashes the spawner.
+        public static Vector2Int GetRandomAdjacent(Vector2Int from, List<Pulpit> occupied, Vector2Int? avoid = null)
         {
             List<Vector2Int> candidates = new List<Vector2Int>();
+            List<Vector2Int> candidatesIgnoringAvoid = new List<Vector2Int>();
 
             foreach (Vector2Int dir in Directions)
             {
                 Vector2Int candidate = from + dir;
-                if (!IsOccupied(candidate, occupied))
+                if (IsOccupied(candidate, occupied)) continue;
+
+                candidatesIgnoringAvoid.Add(candidate);
+                if (!avoid.HasValue || candidate != avoid.Value)
                 {
                     candidates.Add(candidate);
                 }
@@ -35,6 +41,11 @@ namespace Doofus.Pulpits
             if (candidates.Count > 0)
             {
                 return candidates[Random.Range(0, candidates.Count)];
+            }
+
+            if (candidatesIgnoringAvoid.Count > 0)
+            {
+                return candidatesIgnoringAvoid[Random.Range(0, candidatesIgnoringAvoid.Count)];
             }
 
             return from + Directions[Random.Range(0, Directions.Length)];

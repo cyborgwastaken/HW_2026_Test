@@ -25,6 +25,7 @@ namespace Doofus.Pulpits
 
         private readonly List<Pulpit> _activePulpits = new List<Pulpit>();
         private Vector2Int _lastGridPosition;
+        private Vector2Int? _previousGridPosition;
         private Pulpit _lastSpawnedPulpit;
         private Coroutine _spawnLoop;
         private GameConfig _config;
@@ -87,6 +88,7 @@ namespace Doofus.Pulpits
             }
             _activePulpits.Clear();
             _lastGridPosition = Vector2Int.zero;
+            _previousGridPosition = null;
             _lastSpawnedPulpit = null;
             _currentScore = 0;
             FirstPulpit = null;
@@ -111,7 +113,11 @@ namespace Doofus.Pulpits
 
                 if (ready)
                 {
-                    Vector2Int nextPos = PulpitGrid.GetRandomAdjacent(_lastGridPosition, _activePulpits);
+                    // Never place the new pulpit back at the position Doofus most
+                    // recently moved from, even if that pulpit has since despawned
+                    // (its cell would otherwise read as "unoccupied" again).
+                    Vector2Int nextPos = PulpitGrid.GetRandomAdjacent(_lastGridPosition, _activePulpits, _previousGridPosition);
+                    _previousGridPosition = _lastGridPosition;
                     SpawnPulpit(nextPos);
                 }
             }

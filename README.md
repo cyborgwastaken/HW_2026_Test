@@ -6,7 +6,18 @@ Guide **Doofus** across a chain of **Pulpits** — green platforms that count do
 
 ## Demo Video
 
-> _[Gameplay video goes here]_
+https://github.com/user-attachments/assets/cea89790-13f2-4598-890a-29bc1a563af3
+
+## Start Screen
+<img width="1710" height="1112" alt="Screenshot 2026-08-21 at 1 47 33 AM" src="https://github.com/user-attachments/assets/edba8a41-5b5e-46ab-8392-43b7ca44aa54" />
+
+## Game Over Screen
+<img width="1710" height="1112" alt="Screenshot 2026-08-21 at 1 47 51 AM" src="https://github.com/user-attachments/assets/eea1cb44-7ab0-4941-8c59-7051ad33e31f" />
+
+## InGame HUD
+<img width="1710" height="1112" alt="Screenshot 2026-08-21 at 1 50 12 AM" src="https://github.com/user-attachments/assets/44d225fd-e043-48c7-b716-2f018293b62e" />
+
+
 
 ## Controls
 

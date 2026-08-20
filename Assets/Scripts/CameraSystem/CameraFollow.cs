@@ -2,14 +2,15 @@ using UnityEngine;
 
 namespace Doofus.CameraSystem
 {
-    // Third-person chase camera: orbits to stay behind the target's current facing
-    // direction (rotating localOffset by target.rotation each frame) rather than sitting
-    // at a fixed world-space offset, so the camera swings around as the player turns to
-    // move and keeps their back in view - like a standard third-person follow cam.
+    // Fixed-angle follow camera: tracks the player's position from a constant
+    // world-space offset and always looks at them. Deliberately does NOT orbit or
+    // rotate with the player's facing/look direction (i.e. not coupled to the third-
+    // person controller's own camera-target rotation) - the viewing angle stays put,
+    // only the camera's position translates to keep up with the player.
     public class CameraFollow : MonoBehaviour
     {
         [SerializeField] private Transform target;
-        [SerializeField] private Vector3 localOffset = new Vector3(0f, 2.4f, -4.5f);
+        [SerializeField] private Vector3 worldOffset = new Vector3(0f, 4.5f, -6f);
         [SerializeField] private Vector3 lookAtLocalOffset = new Vector3(0f, 1.2f, 0f);
         [SerializeField] private float positionSmoothTime = 0.12f;
         [SerializeField] private float rotationSmoothSpeed = 8f;
@@ -22,7 +23,7 @@ namespace Doofus.CameraSystem
         {
             if (target == null) return;
 
-            Vector3 desiredPosition = target.position + target.rotation * localOffset;
+            Vector3 desiredPosition = target.position + worldOffset;
             transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref _velocity, positionSmoothTime);
 
             Vector3 lookPoint = target.position + lookAtLocalOffset;

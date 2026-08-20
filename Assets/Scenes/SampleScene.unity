@@ -608,7 +608,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Doofus.CameraSystem.CameraFollow
   target: {fileID: 1393777666}
-  localOffset: {x: 0, y: 2.4, z: -4.5}
+  worldOffset: {x: 0, y: 4.5, z: -6}
   lookAtLocalOffset: {x: 0, y: 1.2, z: 0}
   positionSmoothTime: 0.15
   rotationSmoothSpeed: 5

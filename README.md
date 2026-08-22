@@ -5,17 +5,16 @@ A 3D platform-hopping game built for the Hitwicket Game Developer Challenge, mad
 Guide **Doofus** across a chain of **Pulpits** — green platforms that count down and disappear — for as long as you can. The challenge: walk on at least 50 of them.
 
 ## Demo Video
-
-https://github.com/user-attachments/assets/cea89790-13f2-4598-890a-29bc1a563af3
+https://github.com/user-attachments/assets/9e220630-6bbe-412f-8fac-f9c8b78d8c1f
 
 ## Start Screen
-<img width="1710" height="1112" alt="Screenshot 2026-08-21 at 1 47 33 AM" src="https://github.com/user-attachments/assets/edba8a41-5b5e-46ab-8392-43b7ca44aa54" />
-
-## Game Over Screen
-<img width="1710" height="1112" alt="Screenshot 2026-08-21 at 1 47 51 AM" src="https://github.com/user-attachments/assets/eea1cb44-7ab0-4941-8c59-7051ad33e31f" />
+<img width="1710" height="1112" alt="Screenshot 2026-08-22 at 3 20 27 PM" src="https://github.com/user-attachments/assets/5dd011a4-04cf-41c8-b95a-b8f2ef69a7d1" />
 
 ## InGame HUD
-<img width="1710" height="1112" alt="Screenshot 2026-08-21 at 1 50 12 AM" src="https://github.com/user-attachments/assets/44d225fd-e043-48c7-b716-2f018293b62e" />
+<img width="1710" height="1112" alt="Screenshot 2026-08-22 at 3 20 33 PM" src="https://github.com/user-attachments/assets/9c47e0db-9a54-4a2c-bb44-4047cc1f1a99" />
+
+## Game Over Screen
+<img width="1710" height="1112" alt="Screenshot 2026-08-22 at 3 20 39 PM" src="https://github.com/user-attachments/assets/1bfd81ad-f607-4ef8-a53e-1c2f81d3fac2" />
 
 
 
